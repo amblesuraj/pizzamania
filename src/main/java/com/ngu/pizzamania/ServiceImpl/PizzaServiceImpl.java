@@ -3,8 +3,6 @@ package com.ngu.pizzamania.ServiceImpl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 import com.ngu.pizzamania.Model.Pizza;
@@ -12,6 +10,7 @@ import com.ngu.pizzamania.Model.Topping;
 import com.ngu.pizzamania.Repository.PizzaRepository;
 import com.ngu.pizzamania.Repository.ToppingRepository;
 import com.ngu.pizzamania.Service.PizzaService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

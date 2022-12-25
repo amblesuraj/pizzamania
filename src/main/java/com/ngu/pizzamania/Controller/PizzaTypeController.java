@@ -5,14 +5,12 @@ import com.ngu.pizzamania.Model.ApiResponse;
 import com.ngu.pizzamania.Model.ErrorResponse;
 import com.ngu.pizzamania.Model.PizzaType;
 import com.ngu.pizzamania.Service.PizzaTypeService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;

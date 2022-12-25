@@ -2,19 +2,18 @@ package com.ngu.pizzamania.ServiceImpl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
 import com.ngu.pizzamania.Model.Category;
 import com.ngu.pizzamania.Repository.CategoryRepository;
 import com.ngu.pizzamania.Service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;

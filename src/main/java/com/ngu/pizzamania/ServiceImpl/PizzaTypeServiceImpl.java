@@ -3,14 +3,12 @@ package com.ngu.pizzamania.ServiceImpl;
 import com.ngu.pizzamania.Model.PizzaType;
 import com.ngu.pizzamania.Repository.PizzaTypeRepository;
 import com.ngu.pizzamania.Service.PizzaTypeService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,8 +28,7 @@ public class PizzaTypeServiceImpl implements PizzaTypeService {
 
     @Override
     public List<PizzaType> getAllPizzaTypes() {
-        return pizzaTypeRepository.findAll().stream().filter(pizzaType -> pizzaType.getName().startsWith("z"))
-                .collect(Collectors.toList());
+        return pizzaTypeRepository.findAll();
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.ngu.pizzamania.ServiceImpl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -11,12 +10,13 @@ import com.ngu.pizzamania.Model.Topping;
 import com.ngu.pizzamania.Repository.PizzaRepository;
 import com.ngu.pizzamania.Repository.ToppingRepository;
 import com.ngu.pizzamania.Service.ToppingService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class ToppingServiceImpl implements ToppingService {
 
-    private ToppingRepository toppingRepository;
+    private final ToppingRepository toppingRepository;
 
     public ToppingServiceImpl(ToppingRepository toppingRepository, PizzaRepository pizzaRepository) {
         this.toppingRepository = toppingRepository;
