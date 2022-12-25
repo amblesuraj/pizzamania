@@ -34,9 +34,15 @@ public class Pizza implements Serializable {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pizzaType_id", referencedColumnName = "pizzaType_id")
+    private PizzaType pizzaType;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(name = "pizza_topping", joinColumns = @JoinColumn(name = "pizza_id"), inverseJoinColumns = @JoinColumn(name = "topping_id"))
-    private Set<Topping> toppings = new HashSet<>();;
+    private Set<Topping> toppings = new HashSet<>();
 
     public String getCategoryName() {
         return category.getName();

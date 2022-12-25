@@ -34,6 +34,7 @@ public class PizzaServiceImpl implements PizzaService {
         newPizza.setType(pizza.getType());
         newPizza.setAvailable(pizza.isAvailable());
         newPizza.setCategory(pizza.getCategory());
+        newPizza.setPizzaType(pizza.getPizzaType());
         newPizza.getToppings().addAll(pizza.getToppings().stream()
                 .map(topping -> {
                     Topping topping1 = topping;
