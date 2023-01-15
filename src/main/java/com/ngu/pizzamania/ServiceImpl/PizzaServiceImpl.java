@@ -1,8 +1,10 @@
 package com.ngu.pizzamania.ServiceImpl;
 
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.ngu.pizzamania.Model.User;
 import org.springframework.stereotype.Service;
 
 import com.ngu.pizzamania.Model.Pizza;
@@ -11,6 +13,7 @@ import com.ngu.pizzamania.Repository.PizzaRepository;
 import com.ngu.pizzamania.Repository.ToppingRepository;
 import com.ngu.pizzamania.Service.PizzaService;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
 @Service
 @Transactional
@@ -80,5 +83,10 @@ public class PizzaServiceImpl implements PizzaService {
         // return topping1;
         // }).collect(Collectors.toSet()));
         pizzaRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Pizza> getPizzaById(Integer id) {
+        return pizzaRepository.findById(id);
     }
 }

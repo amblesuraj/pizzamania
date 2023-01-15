@@ -3,6 +3,7 @@ package com.ngu.pizzamania.ServiceImpl;
 import com.ngu.pizzamania.Model.Role;
 import com.ngu.pizzamania.Model.SecurityUser;
 import com.ngu.pizzamania.Model.User;
+import com.ngu.pizzamania.Repository.RoleRepository;
 import com.ngu.pizzamania.Repository.UserRepository;
 import com.ngu.pizzamania.Service.UserService;
 import jakarta.transaction.Transactional;
@@ -17,7 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("username not found ::"+username));
@@ -44,14 +50,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User createUser(User user) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = new Role();
-                role.setName("ROLE_USER");
-
-        Role admin = new Role();
-        admin.setName("ROLE_ADMIN");
-        user.addRole(role);
-        user.addRole(admin);
-        
+        Role userRole = roleRepository.findByName("ROLE_USER").orElse(new Role("ROLE_USER"));
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElse(new Role("ROLE_ADMIN"));
+        user.addRole(userRole);
+        user.addRole(adminRole);
         return userRepository.save(user);
     }
 

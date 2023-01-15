@@ -27,7 +27,7 @@ public class PizzaType {
     @Column(nullable = false,unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "pizzaType", orphanRemoval = true)
+    @OneToMany(mappedBy = "pizzaType",cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
     private Set<Pizza> pizzas = new HashSet<>();
 }

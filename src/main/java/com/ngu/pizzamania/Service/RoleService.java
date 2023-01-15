@@ -10,4 +10,6 @@ public interface RoleService {
     List<Role> findAllRoles();
 
     Role findById(Integer id);
+
+    boolean existsByRoleName(String name);
 }

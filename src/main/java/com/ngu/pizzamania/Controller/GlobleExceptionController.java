@@ -14,6 +14,11 @@ import java.util.Date;
 @RestController
 public class GlobleExceptionController {
 
+    /**
+     * @param ex
+     * @param webRequest
+     * @return
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ErrorResponse handlePizzaTypeNotFoundException(ResourceNotFoundException ex, WebRequest webRequest){
         ErrorResponse errorResponse = ex.getErrorResponse();

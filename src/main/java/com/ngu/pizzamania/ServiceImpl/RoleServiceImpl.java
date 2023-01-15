@@ -19,6 +19,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role createRole(Role role) {
+        role.setName("ROLE_"+role.getName().toUpperCase());
         return roleRepository.save(role);
     }
 
@@ -30,5 +31,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findById(Integer id) {
         return roleRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(ErrorResponse.builder().message("ID not found").build()));
+    }
+
+    @Override
+    public boolean existsByRoleName(String name) {
+        return roleRepository.existsByName(name);
     }
 }

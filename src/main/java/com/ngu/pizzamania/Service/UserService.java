@@ -1,8 +1,10 @@
 package com.ngu.pizzamania.Service;
 
+import com.ngu.pizzamania.Model.Role;
 import com.ngu.pizzamania.Model.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {

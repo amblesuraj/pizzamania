@@ -1,6 +1,9 @@
 package com.ngu.pizzamania.Config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ngu.pizzamania.ServiceImpl.UserServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,16 +48,29 @@ public class SecurityConfig {
     }
 
     @Bean
+    public ObjectMapper objectMapper() {
+//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return  new ObjectMapper();
+    }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setSkipNullEnabled(true);
+        return modelMapper;
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->{
-                    auth.requestMatchers("/user/**").permitAll()
-                            .requestMatchers("/pizza/**","/pizzaType/**","/category/**","/toppings/**")
-                            .hasAnyRole("ROLE_USER","ROLE_ADMIN")
-                            .requestMatchers("/pizza/**","/pizzaType/**","/category/**","/toppings/**")
-                            .hasAnyAuthority("ROLE_USER","ROLE_ADMIN");
+                    auth.requestMatchers("/**").permitAll();
+//                            .requestMatchers("/pizza/**","/pizzaType/**","/category/**","/topping/**")
+//                            .hasAnyRole("ROLE_USER","ROLE_ADMIN")
+//                            .requestMatchers("/pizza/**","/pizzaType/**","/category/**","/toppings/**")
+//                            .hasAnyAuthority("ROLE_USER","ROLE_ADMIN");
                 })
                 .sessionManagement(session->{
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
