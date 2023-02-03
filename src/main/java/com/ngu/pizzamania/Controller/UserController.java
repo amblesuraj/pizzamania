@@ -2,19 +2,26 @@ package com.ngu.pizzamania.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ngu.pizzamania.Exception.ResourceNotFoundException;
-import com.ngu.pizzamania.Model.ApiResponse;
-import com.ngu.pizzamania.Model.ErrorResponse;
-import com.ngu.pizzamania.Model.Role;
-import com.ngu.pizzamania.Model.User;
+import com.ngu.pizzamania.Model.*;
+import com.ngu.pizzamania.Service.EmailService;
 import com.ngu.pizzamania.Service.RoleService;
 import com.ngu.pizzamania.Service.UserService;
+import com.ngu.pizzamania.ServiceImpl.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -26,14 +33,21 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+
     @Autowired
     UserService userService;
 
     @Autowired
     RoleService roleService;
-
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    JwtService jwtService;
+    @Autowired
+    EmailService emailService;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @PostMapping("/save")
     public ResponseEntity<?> createUser(@RequestBody User user) {
@@ -130,5 +144,43 @@ public class UserController {
         User updatedUser = objectMapper.readerForUpdating(currentUser).readValue(request.getReader());
         userService.updateUser(updatedUser);
         return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> authenticate(@RequestBody AuthRequest authRequest){
+
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authRequest.getUsername(),
+                        authRequest.getPassword()
+                )
+        );
+        if(authenticate.isAuthenticated()){
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .data(jwtService.generateToken(authRequest.getUsername()))
+                            .message("token generated")
+                            .timeStamp(new Date())
+                            .statusCode(HttpStatus.OK.value())
+                            .httpStatus(HttpStatus.OK)
+                            .build()
+            );
+        }
+       else {
+           throw new ResourceNotFoundException(ErrorResponse.builder()
+                   .message("User not found").build());
+        }
+
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<String> sendEmail(){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("amblesuraj@gmail.com");
+        message.setTo("surajamble1211@gmail.com");
+        message.setSubject("Simple test message");
+        message.setText("message for testing ");
+        emailService.SendEmail(message);
+        return ResponseEntity.ok("Email sent successfully");
     }
 }

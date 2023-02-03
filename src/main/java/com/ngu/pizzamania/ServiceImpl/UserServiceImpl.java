@@ -1,7 +1,6 @@
 package com.ngu.pizzamania.ServiceImpl;
 
 import com.ngu.pizzamania.Model.Role;
-import com.ngu.pizzamania.Model.SecurityUser;
 import com.ngu.pizzamania.Model.User;
 import com.ngu.pizzamania.Repository.RoleRepository;
 import com.ngu.pizzamania.Repository.UserRepository;
@@ -9,42 +8,28 @@ import com.ngu.pizzamania.Service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
-@AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService{
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("username not found ::"+username));
-        return new SecurityUser(user);
-    }
+    private RoleRepository roleRepository;
 
     @Override
     public User createUser(User user) {
