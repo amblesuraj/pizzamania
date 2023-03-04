@@ -11,5 +11,6 @@ public interface RoleService {
 
     Role findById(Integer id);
 
+    Role findByName(String name);
     boolean existsByRoleName(String name);
 }

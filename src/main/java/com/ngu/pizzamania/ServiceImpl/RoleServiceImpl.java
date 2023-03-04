@@ -34,6 +34,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Role findByName(String name) {
+        Role role = roleRepository.findByName(name);
+        if(role == null){
+            role = new Role("ROLE_SUPERADMIN");
+            roleRepository.save(role);
+        }
+        return role;
+        
+    }
+
+    @Override
     public boolean existsByRoleName(String name) {
         return roleRepository.existsByName(name);
     }

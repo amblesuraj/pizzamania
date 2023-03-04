@@ -4,6 +4,7 @@ import com.ngu.pizzamania.Model.Role;
 import com.ngu.pizzamania.Model.User;
 import com.ngu.pizzamania.Repository.RoleRepository;
 import com.ngu.pizzamania.Repository.UserRepository;
+import com.ngu.pizzamania.Service.RoleService;
 import com.ngu.pizzamania.Service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -31,14 +32,15 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public User createUser(User user) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByName("ROLE_USER").orElse(new Role("ROLE_USER"));
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElse(new Role("ROLE_ADMIN"));
-        user.addRole(userRole);
-        user.addRole(adminRole);
+        Role superadminRole = roleService.findByName("ROLE_SUPERADMIN");
+        user.addRole(superadminRole);
         return userRepository.save(user);
     }
 
