@@ -7,9 +7,6 @@ import com.ngu.pizzamania.Repository.UserRepository;
 import com.ngu.pizzamania.Service.RoleService;
 import com.ngu.pizzamania.Service.UserService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -72,6 +69,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean existsByUsernameOREmail(String username, String email) {
         return userRepository.existsByUsernameOrEmail(username,email);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
 

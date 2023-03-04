@@ -71,7 +71,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->{
-                    auth.requestMatchers("/user/**","/user/**").permitAll()
+                    auth.requestMatchers("/user/**","/user**").permitAll()
                             .requestMatchers("/pizza/**","/pizzaType/**","/category/**","/topping/**")
                             .hasAnyRole("ROLE_USER","ROLE_ADMIN")
                             .requestMatchers("/pizza/**","/pizzaType/**","/category/**","/toppings/**")

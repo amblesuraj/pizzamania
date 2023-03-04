@@ -1,10 +1,8 @@
 package com.ngu.pizzamania.Service;
 
-import com.ngu.pizzamania.Model.Role;
 import com.ngu.pizzamania.Model.User;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
@@ -17,4 +15,6 @@ public interface UserService {
     void DeleteUser(Integer id);
 
     boolean existsByUsernameOREmail(String username, String email);
+
+    Optional<User> findByUsername(String username);
 }

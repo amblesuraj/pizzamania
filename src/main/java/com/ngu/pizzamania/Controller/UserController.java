@@ -8,6 +8,7 @@ import com.ngu.pizzamania.Service.RoleService;
 import com.ngu.pizzamania.Service.UserService;
 import com.ngu.pizzamania.ServiceImpl.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
@@ -50,7 +49,7 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @PostMapping("/save")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
         boolean userExists = userService.existsByUsernameOREmail(user.getUsername(), user.getEmail());
         if (userExists) {
             return ResponseEntity.badRequest().body(
@@ -155,10 +154,17 @@ public class UserController {
                         authRequest.getPassword()
                 )
         );
+
+        Map<String,Object> data = new HashMap<>();
+        final Optional<User> userOptional = userService.findByUsername(authRequest.getUsername());
+        if(userOptional.isPresent()){
+            data.put("user",userOptional.get());
+            data.put("token",jwtService.generateToken(authRequest.getUsername()));
+        }
         if(authenticate.isAuthenticated()){
             return ResponseEntity.ok(
                     ApiResponse.builder()
-                            .data(jwtService.generateToken(authRequest.getUsername()))
+                            .data(data)
                             .message("token generated")
                             .timeStamp(new Date())
                             .statusCode(HttpStatus.OK.value())
