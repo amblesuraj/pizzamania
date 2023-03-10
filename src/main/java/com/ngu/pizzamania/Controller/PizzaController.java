@@ -76,7 +76,7 @@ public class PizzaController {
     public Map<String, List<Pizza>> getPizzaByCategory() {
         List<Pizza> allpizzas = pizzaService.getAllPizzas();
         Map<String, List<Pizza>> groupByCategory = allpizzas.stream()
-                .collect(Collectors.groupingBy(Pizza::getCategoryName));
+                .collect(Collectors.groupingBy(pizza -> pizza.getCategory().getName()));
         return groupByCategory;
     }
 

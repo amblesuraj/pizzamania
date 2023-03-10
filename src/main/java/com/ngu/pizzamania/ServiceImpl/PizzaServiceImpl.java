@@ -1,19 +1,19 @@
 package com.ngu.pizzamania.ServiceImpl;
 
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.ngu.pizzamania.Model.User;
-import org.springframework.stereotype.Service;
-
+import com.ngu.pizzamania.Model.Category;
 import com.ngu.pizzamania.Model.Pizza;
+import com.ngu.pizzamania.Model.PizzaType;
 import com.ngu.pizzamania.Model.Topping;
+import com.ngu.pizzamania.Repository.CategoryRepository;
 import com.ngu.pizzamania.Repository.PizzaRepository;
+import com.ngu.pizzamania.Repository.PizzaTypeRepository;
 import com.ngu.pizzamania.Repository.ToppingRepository;
 import com.ngu.pizzamania.Service.PizzaService;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,20 +22,27 @@ public class PizzaServiceImpl implements PizzaService {
     private PizzaRepository pizzaRepository;
     private ToppingRepository toppingRepository;
 
-    public PizzaServiceImpl(PizzaRepository pizzaRepository, ToppingRepository toppingRepository) {
+    private CategoryRepository categoryRepository;
+    private PizzaTypeRepository pizzaTypeRepository;
+
+
+    public PizzaServiceImpl(PizzaRepository pizzaRepository, ToppingRepository toppingRepository,CategoryRepository categoryRepository,PizzaTypeRepository pizzaTypeRepository) {
         this.pizzaRepository = pizzaRepository;
         this.toppingRepository = toppingRepository;
+        this.categoryRepository = categoryRepository;
+        this.pizzaTypeRepository = pizzaTypeRepository;
     }
 
     @Override
     public Pizza createPizza(Pizza pizza) {
-        Pizza newPizza = new Pizza();
+        /*Pizza newPizza = new Pizza();
         newPizza.setPizza_id(pizza.getPizza_id());
         newPizza.setName(pizza.getName());
         newPizza.setSize(pizza.getSize());
         newPizza.setType(pizza.getType());
         newPizza.setAvailable(pizza.isAvailable());
         newPizza.setCategory(pizza.getCategory());
+        newPizza.setPrice(pizza.getPrice());
         newPizza.setPizzaType(pizza.getPizzaType());
         newPizza.getToppings().addAll(pizza.getToppings().stream()
                 .map(topping -> {
@@ -46,8 +53,8 @@ public class PizzaServiceImpl implements PizzaService {
                         topping1.addPizzas(newPizza);
                     }
                     return topping1;
-                }).collect(Collectors.toSet()));
-        return pizzaRepository.save(newPizza);
+                }).collect(Collectors.toSet()));*/
+        return pizzaRepository.save(pizza);
     }
 
     @Override

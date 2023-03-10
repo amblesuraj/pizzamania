@@ -25,11 +25,16 @@ public class Topping implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer topping_id;
+
+    @Column(nullable = false,unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "toppings", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Pizza> pizzas = new HashSet<>();
+
+    @Column(nullable = false)
+    private double price;
 
     public void addPizzas(Pizza pizza) {
         this.pizzas.add(pizza);

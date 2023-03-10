@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type User service.
+ */
 @Service
 @Transactional
 @Slf4j
@@ -36,7 +39,8 @@ public class UserServiceImpl implements UserService{
     public User createUser(User user) {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role superadminRole = roleService.findByName("ROLE_SUPERADMIN");
+        user.setActive(true);
+        Role superadminRole = roleService.findByName("ROLE_USER");
         user.addRole(superadminRole);
         return userRepository.save(user);
     }

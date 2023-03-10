@@ -1,5 +1,6 @@
 package com.ngu.pizzamania.Controller;
 
+import com.ngu.pizzamania.Exception.OutOfOrderQuantityException;
 import com.ngu.pizzamania.Exception.ResourceNotFoundException;
 import com.ngu.pizzamania.Model.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -24,10 +25,21 @@ public class GlobleExceptionController {
      * @return
      */
     @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlePizzaTypeNotFoundException(ResourceNotFoundException ex, WebRequest webRequest){
         ErrorResponse errorResponse = ex.getErrorResponse();
         errorResponse.setHttpStatus(HttpStatus.NOT_FOUND);
         errorResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorResponse.setTimeStamp(new Date());
+        return errorResponse;
+    }
+
+    @ExceptionHandler(OutOfOrderQuantityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse OutOfOrderQuantityException(OutOfOrderQuantityException ex, WebRequest webRequest){
+        ErrorResponse errorResponse = ex.getErrorResponse();
+        errorResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+        errorResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setTimeStamp(new Date());
         return errorResponse;
     }

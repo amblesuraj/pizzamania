@@ -1,6 +1,7 @@
 package com.ngu.pizzamania.Model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
@@ -21,10 +22,15 @@ public class Pizza implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pizza_id;
+    @Column(nullable = false,unique = true)
     private String name;
+    @Column(nullable = false)
     private String type;
     private boolean available = true;
+    @Column(nullable = false)
     private String size;
+    @Column(nullable = false)
+    private double price;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -40,13 +46,18 @@ public class Pizza implements Serializable {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "pizza",cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
+    private Set<CartItem> cartItem;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(name = "pizza_topping", joinColumns = @JoinColumn(name = "pizza_id"), inverseJoinColumns = @JoinColumn(name = "topping_id"))
     private Set<Topping> toppings = new HashSet<>();
 
-    public String getCategoryName() {
+/*    public String getCategoryName() {
         return category.getName();
-    }
+    }*/
 
     public void addToppings(Topping topping) {
         this.toppings.add(topping);
