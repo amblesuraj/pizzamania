@@ -9,8 +9,7 @@ public interface CartService {
 
     Cart addToCart(Pizza pizza, User user, Integer quantity) throws OutOfOrderQuantityException;
 
-    Cart updateCart(Pizza pizza,User user, Integer quantity);
 
-    void deleteById(int id);
+    Cart deleteCartItemById(int id);
 
 }

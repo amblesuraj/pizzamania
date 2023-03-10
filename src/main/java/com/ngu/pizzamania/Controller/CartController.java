@@ -59,4 +59,18 @@ public class CartController {
                         .build()
                 );
     }
+    
+    @DeleteMapping("/delete/cartItem/{id}")
+    public ResponseEntity<ApiResponse> deleteCartItemById(@PathVariable Integer id){
+        Cart cart = cartService.deleteCartItemById(id);
+        return ResponseEntity.ok()
+                .body(ApiResponse
+                        .builder()
+                        .message("CartItem with id "+id +" deleted")
+                        .data(cart)
+                        .statusCode(HttpStatus.OK.value())
+                        .httpStatus(HttpStatus.OK)
+                        .timeStamp(new Date())
+                        .build());
+    }
 }
