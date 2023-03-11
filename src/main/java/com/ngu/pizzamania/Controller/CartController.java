@@ -73,4 +73,24 @@ public class CartController {
                         .timeStamp(new Date())
                         .build());
     }
+
+    @GetMapping("/userCarts")
+    public ResponseEntity<Object> getUserCarts(){
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         Set<CartItem> cartItem = null;
+         Optional<User> optionalUser = userService.findByUsername(authentication.getName());
+        if(optionalUser.isPresent()){
+           User user = optionalUser.get();
+           cartItem  = user.getCartItem();
+        }
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .message("Usercarts retrieved successfully")
+                        .data(cartItem)
+                        .timeStamp(new Date())
+                        .httpStatus(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
+                        .build()
+        );
+    }
 }

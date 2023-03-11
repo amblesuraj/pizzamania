@@ -32,6 +32,9 @@ public class Pizza implements Serializable {
     @Column(nullable = false)
     private double price;
 
+    private String pizzaImage;
+    private String pizzaBannerImage;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,7 +51,7 @@ public class Pizza implements Serializable {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "pizza",cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonIgnore
-    private Set<CartItem> cartItem;
+    private Set<CartItem> cartItem = new HashSet<>();
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany

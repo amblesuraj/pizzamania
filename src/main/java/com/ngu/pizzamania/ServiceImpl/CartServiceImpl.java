@@ -47,12 +47,12 @@ public class CartServiceImpl implements CartService {
            cartItem.setCart(cart);
            cartItem.setPizza(pizza);
            cartItem.setUser(user);
-           cartItem.setQuantity(quantity);
+           checkMaxQuantity(cartItem, quantity);
            cartItem.setSubTotal(pizza.getPrice() * quantity);
            cart.getCartItems().add(cartItem);
        } else {
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            cartItem.setSubTotal(pizza.getPrice() * cartItem.getQuantity());
+           checkMaxQuantity(cartItem, cartItem.getQuantity() + quantity);
+           cartItem.setSubTotal(pizza.getPrice() * cartItem.getQuantity());
        }
         double totalAmount = 0.0;
        for (CartItem item : cart.getCartItems()){
@@ -63,6 +63,13 @@ public class CartServiceImpl implements CartService {
         return cartRepository.save(cart);
     }
 
+    private static void checkMaxQuantity(CartItem cartItem, int quantity) {
+            if(quantity > 10 || (cartItem.getQuantity() != null && cartItem.getQuantity() > 10) || (cartItem.getQuantity() != null && (cartItem.getQuantity() + quantity) > 10)){
+                throw new OutOfOrderQuantityException(ErrorResponse.builder().message("Quantity should be at least 1 and at most 10.").build());
+            } else{
+                 cartItem.setQuantity(quantity);
+            }
+    }
 
 
     @Override

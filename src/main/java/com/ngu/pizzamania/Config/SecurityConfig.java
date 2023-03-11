@@ -25,6 +25,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import java.util.List;
 
@@ -72,7 +75,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth->{
                     auth.requestMatchers("/user/**","/user**").permitAll()
-                            .requestMatchers("/cart/**","cart**","/pizza/**","/pizzaType/**","/category/**","/topping/**")
+                            .requestMatchers("/downloadFile/**","/cart/**","cart**","/pizza/**","/pizzaType/**","/category/**","/topping/**")
                             .hasAnyRole("ROLE_USER","ROLE_ADMIN","ROLE_SUPERADMIN")
                             .requestMatchers("/pizza/**","/pizzaType/**","/category/**","/toppings/**")
                             .hasAnyAuthority("ROLE_USER","ROLE_ADMIN");
@@ -93,5 +96,10 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",configuration);
         return source;
+    }
+
+    @Bean
+    MultipartResolver multipartResolver(){
+        return new StandardServletMultipartResolver();
     }
 }

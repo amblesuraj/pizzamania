@@ -1,6 +1,8 @@
 package com.ngu.pizzamania.Controller;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import com.ngu.pizzamania.Exception.ResourceNotFoundException;
 import com.ngu.pizzamania.Model.ApiResponse;
 import com.ngu.pizzamania.Model.ErrorResponse;
 import com.ngu.pizzamania.Model.User;
+import com.ngu.pizzamania.Service.FileStorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ngu.pizzamania.Model.Pizza;
 import com.ngu.pizzamania.Service.PizzaService;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/pizza")
@@ -30,22 +35,68 @@ public class PizzaController {
     private final PizzaService pizzaService;
     private ObjectMapper objectMapper;
 
-    /**
-     * @param pizza
-     * @return
-     */
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Pizza createPizza(@RequestBody Pizza pizza) {
-        return pizzaService.createPizza(pizza);
-    }
+    private FileStorageService fileStorageService;
 
     /**
      * @param pizza
      * @return
      */
-    @PutMapping("/updates/{id}")
-    public Pizza updatePizza(@RequestBody Pizza pizza) {
-        return pizzaService.updatePizza(pizza);
+    @PostMapping(value = "/create",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> createPizza(@RequestPart("pizza") Pizza pizza, @RequestPart(name = "pizzaImage")MultipartFile pizzaImage,@RequestPart(name = "pizzaBannerImage") MultipartFile pizzaBannerImage) throws IOException {
+
+        final List<String> downloadUri = extractPizzaImagesString(pizzaImage, pizzaBannerImage);
+
+        pizza.setPizzaImage(downloadUri.get(0));
+        pizza.setPizzaBannerImage(downloadUri.get(1));
+        Pizza savedPizza = pizzaService.createPizza(pizza);
+        return ResponseEntity.ok()
+                .body(ApiResponse.builder()
+                        .message("pizza saved successfully")
+                        .data(savedPizza)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .httpStatus(HttpStatus.CREATED)
+                        .timeStamp(new Date())
+                        .build()
+                );
+    }
+
+    private List<String> extractPizzaImagesString(MultipartFile pizzaImage, MultipartFile pizzaBannerImage) throws IOException {
+        List<MultipartFile> multipartFiles = Arrays.asList(pizzaImage, pizzaBannerImage);
+        final List<String> imageStrings = fileStorageService.storeMultipleFiles(multipartFiles);
+        return imageStrings.stream()
+                .map(imageString ->
+                        ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/")
+                                .path(imageString).toUriString()
+                ).toList();
+    }
+    /**
+     * @param pizza
+     * @return
+     */
+    @PutMapping(value = "/updates/{id}")
+    public ResponseEntity<Object> updatePizza(@RequestPart("pizza") Pizza pizza, @RequestPart(name = "pizzaImage")MultipartFile pizzaImage,@RequestPart(name = "pizzaBannerImage") MultipartFile pizzaBannerImage) throws IOException {
+        if(pizza != null){
+            final List<String> downloadUri = extractPizzaImagesString(pizzaImage, pizzaBannerImage);
+
+            pizza.setPizzaImage(downloadUri.get(0));
+            pizza.setPizzaBannerImage(downloadUri.get(1));
+            return ResponseEntity.ok(pizzaService.updatePizza(pizza));
+        }
+        return ResponseEntity.badRequest()
+                .body("Pizza not found");
+    }
+    @PutMapping(value = "/updateImages/{id}")
+    public ResponseEntity<Object> updatePizzaImages(@PathVariable Integer id,@RequestParam(required = false,value = "pizzaImage") MultipartFile pizzaImage,@RequestParam(required = false,value = "pizzaBannerImage")MultipartFile pizzaBannerImage) throws IOException {
+         Pizza pizza = pizzaService.findPizzaById(id);
+        if(pizza != null){
+            final List<String> downloadUri = extractPizzaImagesString(pizzaImage, pizzaBannerImage);
+
+            pizza.setPizzaImage(downloadUri.get(0));
+            pizza.setPizzaBannerImage(downloadUri.get(1));
+            return ResponseEntity.ok(pizzaService.updatePizza(pizza));
+        }
+        return ResponseEntity.badRequest()
+                .body("Pizza with id "+id+" not found");
     }
 
     /**
@@ -80,7 +131,7 @@ public class PizzaController {
         return groupByCategory;
     }
 
-    @PatchMapping("/update/{id}")
+    @PatchMapping(value = "/update/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Pizza> updatePizza(@PathVariable Integer id, HttpServletRequest request) throws IOException {
         Pizza currentPizza = pizzaService.getPizzaById(id).orElseThrow(()-> new ResourceNotFoundException(
                 ErrorResponse.builder()
