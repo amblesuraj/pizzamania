@@ -2,6 +2,7 @@ package com.ngu.pizzamania.Controller;
 
 import com.ngu.pizzamania.Service.FileStorageService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -12,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 @RestController
+@AllArgsConstructor
 public class FileStorageController {
-    @Autowired
-    FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
 
 
     @GetMapping( "/downloadFile/{fileName:.+}")

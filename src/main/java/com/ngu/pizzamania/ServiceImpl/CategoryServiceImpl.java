@@ -2,6 +2,7 @@ package com.ngu.pizzamania.ServiceImpl;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ngu.pizzamania.Model.Category;
@@ -11,13 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
 
     @Override
     public Category createCategory(Category category) {

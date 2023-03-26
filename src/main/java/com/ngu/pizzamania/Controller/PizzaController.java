@@ -33,9 +33,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @AllArgsConstructor
 public class PizzaController {
     private final PizzaService pizzaService;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    private FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
 
     /**
      * @param pizza

@@ -3,6 +3,7 @@ package com.ngu.pizzamania.ServiceImpl;
 import java.util.List;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.ngu.pizzamania.Model.Pizza;
@@ -14,13 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class ToppingServiceImpl implements ToppingService {
 
     private final ToppingRepository toppingRepository;
-
-    public ToppingServiceImpl(ToppingRepository toppingRepository, PizzaRepository pizzaRepository) {
-        this.toppingRepository = toppingRepository;
-    }
 
     @Override
     public Topping createTopping(Topping topping) {

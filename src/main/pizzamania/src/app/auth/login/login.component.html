@@ -1,0 +1,77 @@
+<section id="login">
+  <div class="secure-checkout-title">
+    <h2 class="title-4">
+      <span class="mx-auto"> <i class="fas fa-lock mr-3"></i> Login </span>
+    </h2>
+  </div>
+  <section id="login">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-body">
+            <form [formGroup]="loginForm" (ngSubmit)="Login()">
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="username"
+                  formControlName="username"
+                  placeholder="username"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="passowrd" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control form-control-sm"
+                  id="password"
+                  formControlName="password"
+                />
+              </div>
+              <div class="mb-3 row ms-2">
+                <div class="form-check ms-auto">
+                  <input
+                    class="form-check-input me-3"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Remember Me
+                  </label>
+                </div>
+              </div>
+              <div class="text-center d-grid mt-3 mb-5">
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+
+              <div class="d-flex justify-content-between login-link">
+                <a
+                  name=""
+                  class="text-decoration-none text-primary"
+                  routerLink="/auth/forgot-password"
+                  id=""
+                  href="#"
+                  role="button"
+                  >Forgot Password ?</a
+                >
+                <a
+                  name=""
+                  routerLink="/auth/register"
+                  id=""
+                  class="text-decoration-none text-primary"
+                  href="#"
+                  role="button"
+                  >Haven't you signed up yet?</a
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

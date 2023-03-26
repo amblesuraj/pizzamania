@@ -2,6 +2,7 @@ package com.ngu.pizzamania.Controller;
 
 import com.ngu.pizzamania.Model.Category;
 import com.ngu.pizzamania.Service.CategoryService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,13 +10,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
+@AllArgsConstructor
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Category createCategory(@RequestBody Category category) {

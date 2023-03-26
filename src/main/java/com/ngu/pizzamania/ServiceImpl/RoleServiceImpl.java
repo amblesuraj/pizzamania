@@ -6,16 +6,18 @@ import com.ngu.pizzamania.Model.Role;
 import com.ngu.pizzamania.Repository.RoleRepository;
 import com.ngu.pizzamania.Service.RoleService;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 @Transactional
+@AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    RoleRepository roleRepository;
+
+    private final RoleRepository roleRepository;
 
     @Override
     public Role createRole(Role role) {

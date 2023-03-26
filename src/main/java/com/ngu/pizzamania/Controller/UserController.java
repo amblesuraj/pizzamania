@@ -31,45 +31,22 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
 
-    @Autowired
-    UserService userService;
 
-    @Autowired
-    RoleService roleService;
-    @Autowired
-    ModelMapper modelMapper;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final ModelMapper modelMapper;
+    private final JwtService jwtService;
+    private final EmailService emailService;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    JwtService jwtService;
-    @Autowired
-    EmailService emailService;
-    @Autowired
-    AuthenticationManager authenticationManager;
 
-    @PostMapping("/save")
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
-        boolean userExists = userService.existsByUsernameOREmail(user.getUsername(), user.getEmail());
-        if (userExists) {
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .message("User already exists with given username or email")
-                            .httpStatus(HttpStatus.CONFLICT)
-                            .statusCode(HttpStatus.CONFLICT.value())
-                            .timeStamp(new Date()).build()
-            );
-        }
+    private final ObjectMapper objectMapper;
 
-        return ResponseEntity.ok().body(ApiResponse.builder()
-                .data(userService.createUser(user))
-                .message("User with name " + user.getUsername() + "created successfully")
-                .httpStatus(HttpStatus.CREATED)
-                .statusCode(HttpStatus.CREATED.value())
-                .timeStamp(new Date()).build()
-        );
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
@@ -136,10 +113,7 @@ public class UserController {
         return roleService.findById(id);
     }
 
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+
     @PatchMapping("/update/{id}")
     public ResponseEntity<User> updateUsers(@PathVariable Integer id, HttpServletRequest request) throws IOException {
         User currentUser = userService.findById(id).orElse(null);

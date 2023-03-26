@@ -1,14 +1,10 @@
 package com.ngu.pizzamania.ServiceImpl;
 
-import com.ngu.pizzamania.Model.Category;
 import com.ngu.pizzamania.Model.Pizza;
-import com.ngu.pizzamania.Model.PizzaType;
 import com.ngu.pizzamania.Model.Topping;
-import com.ngu.pizzamania.Repository.CategoryRepository;
 import com.ngu.pizzamania.Repository.PizzaRepository;
-import com.ngu.pizzamania.Repository.PizzaTypeRepository;
-import com.ngu.pizzamania.Repository.ToppingRepository;
 import com.ngu.pizzamania.Service.PizzaService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,21 +13,10 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class PizzaServiceImpl implements PizzaService {
 
-    private PizzaRepository pizzaRepository;
-    private ToppingRepository toppingRepository;
-
-    private CategoryRepository categoryRepository;
-    private PizzaTypeRepository pizzaTypeRepository;
-
-
-    public PizzaServiceImpl(PizzaRepository pizzaRepository, ToppingRepository toppingRepository,CategoryRepository categoryRepository,PizzaTypeRepository pizzaTypeRepository) {
-        this.pizzaRepository = pizzaRepository;
-        this.toppingRepository = toppingRepository;
-        this.categoryRepository = categoryRepository;
-        this.pizzaTypeRepository = pizzaTypeRepository;
-    }
+    private final PizzaRepository pizzaRepository;
 
     @Override
     public Pizza createPizza(Pizza pizza) {

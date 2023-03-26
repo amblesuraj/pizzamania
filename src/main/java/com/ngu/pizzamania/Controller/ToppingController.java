@@ -2,19 +2,18 @@ package com.ngu.pizzamania.Controller;
 
 import com.ngu.pizzamania.Model.Topping;
 import com.ngu.pizzamania.Service.ToppingService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/topping")
+@RequiredArgsConstructor
 public class ToppingController {
 
-    private ToppingService toppingService;
+    private final ToppingService toppingService;
 
-    public ToppingController(ToppingService toppingService) {
-        this.toppingService = toppingService;
-    }
 
     @PostMapping("/create")
     public Topping createTopping(@RequestBody Topping topping) {

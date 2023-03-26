@@ -6,6 +6,7 @@ import com.ngu.pizzamania.Model.*;
 import com.ngu.pizzamania.Service.CartService;
 import com.ngu.pizzamania.Service.PizzaService;
 import com.ngu.pizzamania.Service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
@@ -21,19 +22,20 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cart")
+@AllArgsConstructor
 public class CartController {
 
-    @Autowired
-    CartService cartService;
 
-    @Autowired
-    PizzaService pizzaService;
+    private final CartService cartService;
 
-    @Autowired
-    UserService userService;
 
-    @Autowired
-    MessageSource messageSource;
+    private final PizzaService pizzaService;
+
+
+    private final UserService userService;
+
+
+    private final MessageSource messageSource;
     @PostMapping("/addToCart/{pizzaId}")
     public ResponseEntity<Object> addToCart(@PathVariable Integer pizzaId, @RequestParam Integer quantity) throws OutOfOrderQuantityException {
         Pizza pizza =null;

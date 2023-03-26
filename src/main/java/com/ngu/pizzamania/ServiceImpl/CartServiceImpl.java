@@ -5,33 +5,25 @@ import com.ngu.pizzamania.Exception.ResourceNotFoundException;
 import com.ngu.pizzamania.Model.*;
 import com.ngu.pizzamania.Repository.CartItemRepository;
 import com.ngu.pizzamania.Repository.CartRepository;
-import com.ngu.pizzamania.Repository.PizzaRepository;
 import com.ngu.pizzamania.Repository.UserRepository;
 import com.ngu.pizzamania.Service.CartService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    CartItemRepository cartItemRepository;
-
-    @Autowired
-    PizzaRepository pizzaRepository;
-
-    @Autowired
-    UserRepository userRepository;
+    
+    final private CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
 
 
     @Override

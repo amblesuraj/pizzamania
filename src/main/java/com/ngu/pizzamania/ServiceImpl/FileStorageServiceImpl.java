@@ -30,9 +30,6 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     public FileStorageServiceImpl() {
         this.fileStorageLocation = Paths.get(System.getProperty("user.dir") + "/upload").toAbsolutePath().normalize();
-
-        System.out.println(fileStorageLocation);
-
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) {
